@@ -61,16 +61,14 @@ void GaussianBlur::blocking_transport(tlm::tlm_generic_payload &payload,
   switch (payload.get_command()) {
   case tlm::TLM_READ_COMMAND:
     switch (addr) {
-    case GAUSSIAN_FILTER_RESULT_ADDR:
-      if (mask_ptr[0] == 0xff) {
-        buffer.uint[0] = o_red.read();
-      }
-      if (mask_ptr[1] == 0xff) {
-        buffer.uint[1] = o_green.read();
-      }
-      if (mask_ptr[2] == 0xff) {
-        buffer.uint[2] = o_blue.read();
-      }
+    case GAUSSIAN_FILTER_RESULT_ADDR1:
+      buffer.uint = o_red.read();
+      break;
+    case GAUSSIAN_FILTER_RESULT_ADDR2:
+      buffer.uint = o_green.read();
+      break;
+    case GAUSSIAN_FILTER_RESULT_ADDR3:
+      buffer.uint = o_blue.read();
       break;
     default:
       std::cerr << "Error! GaussianBlur::blocking_transport: address 0x"
@@ -86,14 +84,16 @@ void GaussianBlur::blocking_transport(tlm::tlm_generic_payload &payload,
 
   case tlm::TLM_WRITE_COMMAND:
     switch (addr) {
-    case GAUSSIAN_FILTER_RESULT_ADDR1:
-      buffer.uint = o_red.read();
-      break;
-    case GAUSSIAN_FILTER_RESULT_ADDR2:
-      buffer.uint = o_green.read();
-      break;
-    case GAUSSIAN_FILTER_RESULT_ADDR3:
-      buffer.uint = o_blue.read();
+    case GAUSSIAN_FILTER_R_ADDR:
+      if (mask_ptr[0] == 0xff) {
+        i_r.write(data_ptr[0]);
+      }
+      if (mask_ptr[1] == 0xff) {
+        i_g.write(data_ptr[1]);
+      }
+      if (mask_ptr[2] == 0xff) {
+        i_b.write(data_ptr[2]);
+      }
       break;
     default:
       std::cerr << "Error! GaussianBlur::blocking_transport: address 0x"
