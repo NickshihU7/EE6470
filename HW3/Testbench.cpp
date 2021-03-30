@@ -161,10 +161,12 @@ void Testbench::do_gaussian() {
         }
       }
 
-      initiator.read_from_socket(GAUSSIAN_FILTER_RESULT_ADDR, mask, data.uc, 4);
-      red = data.uint[0];
-      green = data.uint[1];
-      blue = data.uint[2];
+      initiator.read_from_socket(GAUSSIAN_FILTER_RESULT_ADDR1, mask, data.uc, 4);
+      red = data.uint;
+      initiator.read_from_socket(GAUSSIAN_FILTER_RESULT_ADDR2, mask, data.uc, 4);
+      green = data.uint;
+      initiator.read_from_socket(GAUSSIAN_FILTER_RESULT_ADDR3, mask, data.uc, 4);
+      blue = data.uint;
       //cout << "red = " << red << endl;
       //cout << "green = " << green << endl;
       //cout << "blue = " << blue << endl;
