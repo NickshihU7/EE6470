@@ -8,10 +8,12 @@ const double bias = 0.0;
 
 const int GAUSSIAN_FILTER_R_ADDR = 0x00000000;
 const int GAUSSIAN_FILTER_RESULT_ADDR = 0x00000004;
+const int GAUSSIAN_FILTER_RESULT_ADDR2 = 0x00000008;
+const int GAUSSIAN_FILTER_RESULT_ADDR3 = 0x0000000c;
 
 union word {
-  int sint[4];
-  unsigned int uint[4];
+  int sint;
+  unsigned int uint;
   unsigned char uc[4];
 };
 
