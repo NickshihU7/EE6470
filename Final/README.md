@@ -11,7 +11,7 @@ FFT is an algorithm that computes the discrete Fourier transform (DFT) of a sequ
 
 The formula for the DFT is: 
 
-$$X^{d}\left ( k \right )=\sum_{n=0}^{N-1}x\left ( n \right )W_{nk}^{N}\: , \: 0\leq k\leq N-1\, , where\: \:  W_{nk}^{N}=exp\left ( -j\frac{2\pi}{N}nk \right )$$
+$X^{d}\left ( k \right )=\sum_{n=0}^{N-1}x\left ( n \right )W_{nk}^{N}\: , \: 0\leq k\leq N-1\, , where\: \:  W_{nk}^{N}=exp\left ( -j\frac{2\pi}{N}nk \right )$
 
 ## System Architecture
 
