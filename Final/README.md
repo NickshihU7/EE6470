@@ -1,6 +1,6 @@
 # Final Project - 1D Fast Fourier Transform (1D FFT)
 
-## The goal of this project
+## The Goal of This Project
 
 The goal is to implement a 16-pt FFT module with a multi-core riscv-vp platform.  
 In this project, I implemented the FFT core module on both single core platform and multi-core platform to compare the performance between w/ and w/o parallelism. In addition, to get the exact simulated time of the FFT core, a HLS FFT module is also implemented.
