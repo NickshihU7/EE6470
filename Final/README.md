@@ -11,9 +11,10 @@ FFT is an algorithm that computes the discrete Fourier transform (DFT) of a sequ
 
 The formula for the DFT is: 
 
-![DFT Formula](https://latex.codecogs.com/svg.image?X^{d}\left&space;(&space;k&space;\right&space;)=\sum_{n=0}^{N-1}x\left&space;(&space;n&space;\right&space;)W_{nk}^{N}\:&space;,&space;\:&space;0\leq&space;k\leq&space;N-1\,&space;,&space;where\:&space;\:&space;&space;W_{nk}^{N}=exp\left&space;(&space;-j\frac{2\pi}{N}nk&space;\right&space;))
+![DFT Formula](https://latex.codecogs.com/svg.image?X%5E%7Bd%7D%5Cleft%20(%20k%20%5Cright%20)=%5Csum_%7Bn=0%7D%5E%7BN-1%7Dx%5Cleft%20(%20n%20%5Cright%20)W_%7Bnk%7D%5E%7BN%7D,%200%5Cleq%20k%5Cleq%20N-1%5C)
 
-$X^{d}\left ( k \right )=\sum_{n=0}^{N-1}x\left ( n \right )W_{nk}^{N}\: , \: 0\leq k\leq N-1\, , where\: \:  W_{nk}^{N}=exp\left ( -j\frac{2\pi}{N}nk \right )$
+where the twiddle factor (TF)
+![TF](https://latex.codecogs.com/svg.image?W_{nk}^{N}=exp\left&space;(&space;-j\frac{2\pi}{N}nk&space;\right&space;))
 
 ## System Architecture
 
