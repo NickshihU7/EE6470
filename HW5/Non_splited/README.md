@@ -85,18 +85,18 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 
 ## How to execute the codes
 
-- First of all, go to the stratus directory.
+-	First of all, go to the stratus directory.
 
 		$ cd $HW5/Non-splited/stratus
 
-- Run behavioral simulation.
+-	Run behavioral simulation.
 
 		$ make sim_B
 
-- Run synthesis and Verilog simulation with HLS configuration BASIC.
+-	Run synthesis and Verilog simulation with HLS configuration BASIC.
 
 		$ make sim_V_BASIC
 
-- Run synthesis and Verilog simulation with HLS configuration DPA.
+-	Run synthesis and Verilog simulation with HLS configuration DPA.
 
 		$ make sim_V_DPA
