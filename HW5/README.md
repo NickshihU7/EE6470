@@ -8,7 +8,7 @@ The goal is to synthesize the kernel function of the Gaussian blur and annotate 
 
 The system architecture is similar as the one in HW2, as shown in the figure below.
 
-![The system architecture](/hw5.png)
+![The system architecture](hw5.png)
 
 1. 	A top-level module `System` is instantiated to contain `Testbench` and `GaussianBlur`.
 2. 	Compared to HW2, the three R, G, and B channels are combined as one channel "rgb".
@@ -111,8 +111,8 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 
 -	The RTL analysis for BASIC configuration.
 
-	![The BASIC RTL analysis](/BASIC.jpeg)
+	![The BASIC RTL analysis](BASIC.jpeg)
 
 -	The RTL analysis for DPA configuration.
 
-	![The DPA RTL analysis](/DPA.jpeg)
+	![The DPA RTL analysis](DPA.jpeg)
