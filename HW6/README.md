@@ -1,5 +1,5 @@
-# Data Partitioning of the Gaussian Blur Processing
+# Cross-compile Gaussian Blur to RISC-V VP platform
 
 ## The Goal of This HW
 
-In this HW, we're going to add two Gaussian Blur modules to the dual-core riscv-vp platform "tiny32-mc". To achieve parallelism,the image is partitioned into equal parts and a multi-core program is written to issue the processing to the two modules.
+In this HW, we're going to port the Gaussian blur module to the "basic-acc" platform, and simulate the behavior that a program runs on the RISC-V single core platform.
