@@ -1,6 +1,6 @@
 # High Level Synthesis (HLS) of Gaussian Blur
 
-## The goal of this HW
+## The Goal of This HW
 
 The goal is to synthesize the kernel function of the Gaussian blur and annotate the timing back to the platform from previous homework.
 
