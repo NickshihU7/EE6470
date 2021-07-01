@@ -1,4 +1,4 @@
-# High level synthesis of Gaussian Blur
+# High Level Synthesis (HLS) of Gaussian Blur
 
 ## The goal of this HW
 
@@ -87,7 +87,7 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 
 -	First of all, go to the stratus directory.
 
-		$ cd $HW5/Non-splited/stratus
+		$ cd $HW5/Splited/stratus
 
 -	Run behavioral simulation.
 
@@ -100,3 +100,19 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 -	Run synthesis and Verilog simulation with HLS configuration DPA.
 
 		$ make sim_V_DPA
+
+## Results
+
+| Configuration | Simulated time | Synthesized Area |
+| -----------   | -------------- | ---------------- |
+| sim_B        	|    26214450 ns |             None |
+| sim_V_BASIC   |    43909110 ns |             3984 |
+| sim_V_DPA     |    38010870 ns |             3420 |
+
+-	The RTL analysis for BASIC configuration.
+
+	![The BASIC RTL analysis](/diagrams/BASIC.jpeg)
+
+-	The RTL analysis for DPA configuration.
+
+	![The DPA RTL analysis](/diagrams/DPA.jpeg)
