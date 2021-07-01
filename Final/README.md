@@ -27,7 +27,7 @@ Thus, the FFT was proposed for the purpose of making it efficient and more hardw
 
 which devides the output terms into even and odd. By doing so on and on for each stage, finally it has the time somplexity of Nlog2(N), which significantly decreasse the latency.
 
-The relative architecture design for 16-pt DIF FFT is shown in the figure below.
+The relative architecture design for 16-pt DIF FFT which has 4 stages is shown in the figure below.
 
 ![DIF FFT diagram](DIF_FFT.png)
 
@@ -35,18 +35,20 @@ Each cross in the figure above is the basic computation unit of this architectur
 
 ![Butterfly diagram](butterfly.png)
 
-## System Architecture
+The order of inputs in this DIF FFT algorithm is in order. Nevertheless, the ouputs are in bit-reversed order. Thus, we'll need a re-order module to get the outputs in order. 
 
-The system architecture is similar as the one in HW2, as shown in the figure below.
+## System Architecture for Dual-core System
 
-![The system architecture](hw5.png)
+The system architecture is similar to the one in HW4, which uses the TLM transaction and a simpleBus to transfer the data in between as shown in the figure below. In addition, a direct memory access (DMA) module is involved to provide a faster data transfer.
+
+![The system architecture](final.png)
 
 1. 	A top-level module `System` is instantiated to contain `Testbench` and `GaussianBlur`.
 2. 	Compared to HW2, the three R, G, and B channels are combined as one channel "rgb".
 3. 	Instead of `sc_fifo`, the data channels are defined as the synthesizable streaming interface `cynw_p2p<>` of Stratus HLS.
 4. 	The directory stratus contains the Stratus HLS project file (project.tcl) and Makefile to run Stratus HLS.
 
-## Modifications made in codes
+## Highlighted points in codes
 
 1.	In the system.h:
 
@@ -116,9 +118,11 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 
 ## How to execute the codes
 
+### HLS simulation
+
 -	First of all, go to the stratus directory.
 
-		$ cd $HW5/Splited/stratus
+		$ cd $Final/hls/stratus
 
 -	Run behavioral simulation.
 
@@ -132,14 +136,63 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 
 		$ make sim_V_DPA
 
+### RISC-V VP
+
+-	Build the platforms of RISC-V VP.
+
+		- $ cd Final/riscv-vp/vp
+		- $ mkdir build
+		- $ cd build
+		- $ cmake ..
+		- $ make install
+
+-	Go to one of the following working directory.
+
+		- $ cd Final/riscv-vp/vp/sw/singlecore
+		- $ cd Final/riscv-vp/vp/sw/multicore
+
+-	Compile and Run simulaitons.
+
+		- $ make
+		- $ make sim
+
 ## Results
 
+-	The 16-pt inputs lie in the files `in_real.h` and `in_imag.h` are shown below.
+		
+		int input_r [16] = {
+			1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+		int input_i [16] = {
+			2021,2021,2021,2021,2021,2021,2021,2021,
+			2021,2021,2021,2021,2021,2021,2021,2021};
+
+-	The outputs I got are as follows which are as expected.
+
+		out_real = 1, out_imag = 32336
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+		out_real = 1, out_imag = 0
+
 -	The synthesized results lies in the table below:
-	| Configuration | Simulated time | Synthesized Area |
-	| -----------   | -------------: | ---------------: |
-	| sim_B        	|    26214450 ns |             None |
-	| sim_V_BASIC   |    43909110 ns |             3984 |
-	| sim_V_DPA     |    38010870 ns |             3420 |
+
+	| Configuration | Simulated time |
+	| -----------   | -------------: |
+	| HLS sim_B    	|     2621430 ns |
+	| Sinale core   |    43909110 ns |
+	| Dual core     |    38010870 ns |
 
 -	The RTL analysis for BASIC configuration.
 
