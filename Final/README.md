@@ -27,8 +27,13 @@ Thus, the FFT was proposed for the purpose of making it efficient and more hardw
 
 which devides the output terms into even and odd. By doing so on and on for each stage, finally it has the time somplexity of Nlog2(N), which significantly decreasse the latency.
 
+The relative architecture design for 16-pt DIF FFT is shown in the figure below.
 
-=\sum_{n=0}^{N/2-1}\left [ x\left ( n \right )+x\left ( n+\frac{N}{2} \right ) \right ]W_{N/2}^{mn}+\sum_{n=0}^{N/2-1}\left\{ \left [ x\left ( n \right )-x\left ( n+\frac{N}{2} \right ) \right ]W_{N/2}^{mn}\right\}\cdot W_{N}^{n}
+![DIF FFT diagram](DIF_FFT.png)
+
+Each cross in the figure above is the basic computation unit of this architecture, which is called "Butterfly." Each butterfly has 2 complex inputs and 2 complex outputs, which involves in a multiplication with TFs and 2 additions. The block diagram of it is shown below.
+
+![Butterfly diagram](butterfly.png)
 
 ## System Architecture
 
