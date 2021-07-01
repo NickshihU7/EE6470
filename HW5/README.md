@@ -103,6 +103,7 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 
 ## Results
 
+-	The synthesized results lies in the table below:
 	| Configuration | Simulated time | Synthesized Area |
 	| -----------   | -------------: | ---------------: |
 	| sim_B        	|    26214450 ns |             None |
