@@ -140,21 +140,27 @@ The system architecture is similar to the one in HW4, which uses the TLM transac
 
 -	Build the platforms of RISC-V VP.
 
-		- $ cd Final/riscv-vp/vp
-		- $ mkdir build
-		- $ cd build
-		- $ cmake ..
-		- $ make install
+		-	$ cd Final/riscv-vp/vp
+
+		-	$ mkdir build
+
+		-	$ cd build
+
+		-	$ cmake ..
+
+		-	$ make install
 
 -	Go to one of the following working directory.
 
-		- $ cd Final/riscv-vp/vp/sw/singlecore
-		- $ cd Final/riscv-vp/vp/sw/multicore
+		-	$ cd Final/riscv-vp/vp/sw/singlecore
+
+		-	$ cd Final/riscv-vp/vp/sw/multicore
 
 -	Compile and Run simulaitons.
 
-		- $ make
-		- $ make sim
+		-	$ make
+		
+		-	$ make sim
 
 ## Results
 
