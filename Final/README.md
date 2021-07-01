@@ -35,7 +35,11 @@ Each cross in the figure above is the basic computation unit of this architectur
 
 ![Butterfly diagram](butterfly.png)
 
-The order of inputs in this DIF FFT algorithm is in order. Nevertheless, the ouputs are in bit-reversed order. Thus, we'll need a re-order module to get the outputs in order. 
+The order of inputs in this DIF FFT algorithm is in order. Nevertheless, the ouputs are in bit-reversed order. Thus, we'll need a re-order module to get the outputs in order.
+
+- Modifications in dual-core version
+
+To make it run parallelly, the 16-pt inputs are splited into two 8-pt inputs for both real and imaginary parts. In addition, the 16-pts DIF FFT is replaced with two 8-pt DIF FFT.
 
 ## System Architecture for Dual-core System
 
@@ -199,13 +203,17 @@ The system architecture is similar to the one in HW4, which uses the TLM transac
 			Total run time = 2621430 ns
 			Simulated time == 2621490 ns
 
+	-	The single core version.
+
+	-	The dual-core version.
+
 	-	To sum up:
 
 		| Configuration | Simulated time |
 		| -----------   | -------------: |
 		| HLS sim_B    	|     2621430 ns |
 		| Sinale core   |    43909110 ns |
-		| Dual core     |    38010870 ns |
+		| Dual-core     |    38010870 ns |
 
 -	The RTL analysis for BASIC configuration.
 
