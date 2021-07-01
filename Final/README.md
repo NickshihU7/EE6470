@@ -186,13 +186,26 @@ The system architecture is similar to the one in HW4, which uses the TLM transac
 		out_real = 1, out_imag = 0
 		out_real = 1, out_imag = 0
 
--	The synthesized results lies in the table below:
+-	The simulated results are as follows:
 
-	| Configuration | Simulated time |
-	| -----------   | -------------: |
-	| HLS sim_B    	|     2621430 ns |
-	| Sinale core   |    43909110 ns |
-	| Dual core     |    38010870 ns |
+	-	The HLS behavioral simulation.
+
+			    SystemC 2.3.1-Accellera --- Feb 14 2019 12:08:38
+	        Copyright (c) 1996-2014 by all Contributors,
+	        ALL RIGHTS RESERVED
+			NOTE: Cadence Design Systems Hub Simulation Platform : version 19.12-s100
+
+			Info: /OSCI/SystemC: Simulation stopped by user.
+			Total run time = 2621430 ns
+			Simulated time == 2621490 ns
+
+	-	To sum up:
+
+		| Configuration | Simulated time |
+		| -----------   | -------------: |
+		| HLS sim_B    	|     2621430 ns |
+		| Sinale core   |    43909110 ns |
+		| Dual core     |    38010870 ns |
 
 -	The RTL analysis for BASIC configuration.
 
