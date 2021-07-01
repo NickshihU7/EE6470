@@ -104,7 +104,7 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 ## Results
 
 | Configuration | Simulated time | Synthesized Area |
-| -----------   | -------------- | ---------------- |
+| -----------   | -------------: | ---------------: |
 | sim_B        	|    26214450 ns |             None |
 | sim_V_BASIC   |    43909110 ns |             3984 |
 | sim_V_DPA     |    38010870 ns |             3420 |
