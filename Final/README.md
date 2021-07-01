@@ -50,7 +50,7 @@ To make it run parallelly, the 16-pt inputs are splited into two 8-pt inputs for
 3. 	Instead of `sc_fifo`, the data channels are defined as the synthesizable streaming interface `cynw_p2p<>` of Stratus HLS.
 4. 	The directory stratus contains the Stratus HLS project file (project.tcl) and Makefile to run Stratus HLS.
 
-## Highlighted points in codes
+## Implementations
 
 1.	In the system.h:
 
