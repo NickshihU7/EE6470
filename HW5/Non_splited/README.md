@@ -18,6 +18,7 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 ## Modifications made in codes
 
 1.	In the system.h:
+
 		#ifndef NATIVE_SYSTEMC
 			GaussianBlur_wrapper gaussian_blur;
 		#else
@@ -38,6 +39,7 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 		#endif
 
 2.	In the Testbench.h:
+
 		#ifndef NATIVE_SYSTEMC
 			cynw_p2p< sc_dt::sc_uint<24> >::base_out o_rgb;
 			cynw_p2p< sc_dt::sc_uint<32> >::base_in i_red;
@@ -64,6 +66,7 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 		#endif
 
 4.	In the Testbench.cpp and GaussianBlur.cpp, the read() and write() functions are replaced with get() and put() functions. For example:
+
 		#ifndef NATIVE_SYSTEMC
 			o_rgb.put(rgb);
 		#else
@@ -82,13 +85,17 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 ## How to execute the codes
 
 - First of all, go to the stratus directory.
+
 	$ cd $HW5/Non-splited/stratus
 
 - Run behavioral simulation.
+
 	$ make sim_B
 
 - Run synthesis and Verilog simulation with HLS configuration BASIC.
+
 	$ make sim_V_BASIC
 
 - Run synthesis and Verilog simulation with HLS configuration DPA.
+
 	$ make sim_V_DPA
