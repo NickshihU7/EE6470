@@ -17,6 +17,15 @@ where the twiddle factor (TF)
 
 ![TF](https://latex.codecogs.com/svg.image?W_{nk}^{N}=exp\left&space;(&space;-j\frac{2\pi}{N}nk&space;\right&space;))
 
+The DFT thus has the time complexity of N^2, where the N is the number of inputs, which Hence is inefficient for hardware.
+
+Thus, the FFT was proposed for the purpose of making it efficient and more hardware suitable. The decimation-in-frequency (DIF) FFT algorithm is: 
+
+![TF](https://latex.codecogs.com/svg.image?X\left&space;(&space;k&space;\right&space;)=X\left&space;(&space;2m&space;\right&space;)&plus;X\left&space;(&space;2m&plus;1&space;\right&space;)\\=\sum_{n=0}^{N/2-1}\left&space;[&space;x\left&space;(&space;n&space;\right&space;)&plus;x\left&space;(&space;n&plus;\frac{N}{2}&space;\right&space;)&space;\right&space;]W_{N/2}^{mn}&plus;\sum_{n=0}^{N/2-1}\left\{&space;\left&space;[&space;x\left&space;(&space;n&space;\right&space;)-x\left&space;(&space;n&plus;\frac{N}{2}&space;\right&space;)&space;\right&space;]W_{N/2}^{mn}\right\}\cdot&space;W_{N}^{n})
+
+which devides the output terms into even and odd. By doing so on and on for each stage, finally it has the time somplexity of N*log2(N), which significantly decreasse the latency.
+
+
 ## System Architecture
 
 The system architecture is similar as the one in HW2, as shown in the figure below.
