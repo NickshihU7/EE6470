@@ -53,6 +53,7 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 		#endif
 
 3.	In the GaussianBlur.cpp:
+
 		#ifndef NATIVE_SYSTEMC
 			cynw_p2p< sc_dt::sc_uint<24> >::in i_rgb;
 			cynw_p2p< sc_dt::sc_uint<32> >::out o_red;
@@ -86,16 +87,16 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 
 - First of all, go to the stratus directory.
 
-	$ cd $HW5/Non-splited/stratus
+		$ cd $HW5/Non-splited/stratus
 
 - Run behavioral simulation.
 
-	$ make sim_B
+		$ make sim_B
 
 - Run synthesis and Verilog simulation with HLS configuration BASIC.
 
-	$ make sim_V_BASIC
+		$ make sim_V_BASIC
 
 - Run synthesis and Verilog simulation with HLS configuration DPA.
 
-	$ make sim_V_DPA
+		$ make sim_V_DPA
