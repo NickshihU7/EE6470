@@ -120,6 +120,10 @@ The figure below shows the dataflow of the platform. The input is fed into the `
 
 ## Results
 
+-	Input and output bitmap result:
+
+	![The output](output.png)
+
 -	The synthesized results of simulated time lie in the table below:
 
 	|                 | sim_B | sim_V_BASIC |  sim_V_DPA  |
@@ -143,3 +147,13 @@ The figure below shows the dataflow of the platform. The input is fed into the `
 -	The RTL analysis for DPA configuration.
 
 	![The DPA RTL analysis](DPA.jpeg)
+
+-	Finally, annotate the timing back to the SCML platform as follows:
+
+		Simulated time:
+
+	And we'll get a more accurate simulated time of the entire system.
+
+	![The output timing result](simulated_time.png)
+
+
