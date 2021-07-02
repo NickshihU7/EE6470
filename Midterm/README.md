@@ -6,11 +6,11 @@ In this project we're going to synthesize the kernel function of the edge detect
 
 Obviously, the purpose of edge detection filter is to detect the edges on a picture in all directions. To achieve this, the filter has to detect the four directions of the edges, including vertical, horizontal, 45 degree, and -45 degree. Thus, an edge detection filter is actually a combination of four filters as shown in the figure below.
 
-<div align="center"> <img src="edge.jpg" width="80%"/> <div>
+<div align="center"> <img src="edge.jpg" width="80%"/> </div>
 
 To adapt the filter to the input image, convolution is used here as shown in the following figure.
 
-<div align="center"> <img src="conv.png" width="60%"/> <div>
+<div align="center"> <img src="conv.png" width="60%"/> </div>
 
 ## System Architecture
 
@@ -18,17 +18,17 @@ To adapt the filter to the input image, convolution is used here as shown in the
 
 The system architecture of the HLS platform is shown in the figure below. Only the kernal block, edge detection filter, is synthesized. The inputs and outputs are fed and fetched in splited R, G, and B channels.
 
-<div align="center"> <img src="hls_system.png" width="60%"/> <div>
+<div align="center"> <img src="hls_system.png" width="60%"/> </div>
 
 ### SCML Platform
 
 The system architecture of the SCML platform is shown in the figure below where a RAM and a SCML router are involved.
 
-<div align="center"> <img src="scml_system.png" width="60%"/> <div>
+<div align="center"> <img src="scml_system.png" width="60%"/> </div>
 
 The figure below shows the dataflow of the platform. The input is fed into the `Testbench` and is sent to the computation kernal `Edge detection filter` through the SCML router. After the computation, the results are written to `RAM` again through the router and dump a output bitmap.
 
-<div align="center"> <img src="dataflow.png" width="80%"/> <div>
+<div align="center"> <img src="dataflow.png" width="80%"/> </div>
 
 ## Implemantation and Optimizations
 
@@ -122,7 +122,7 @@ The figure below shows the dataflow of the platform. The input is fed into the `
 
 -	Input and output bitmap result:
 
-	<div align="center"> <img src="output.png" width="50%"/> <div>
+	<div align="center"> <img src="output.png" width="50%"/> </div>
 
 -	The synthesized results of simulated time lie in the table below:
 
