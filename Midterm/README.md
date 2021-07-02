@@ -14,14 +14,21 @@ To adapt the filter to the input image, convolution is used here as shown in the
 
 ## System Architecture
 
-The system architecture is similar as the one in HW2, as shown in the figure below.
+### HLS Platform
 
-![The system architecture](hw5.png)
+The system architecture of the HLS platform is shown in the figure below. Only the kernal block, edge detection filter, is synthesized. The inputs and outputs are fed and fetched in splited R, G, and B channels.
 
-1. 	A top-level module `System` is instantiated to contain `Testbench` and `GaussianBlur`.
-2. 	Compared to HW2, the three R, G, and B channels are combined as one channel "rgb".
-3. 	Instead of `sc_fifo`, the data channels are defined as the synthesizable streaming interface `cynw_p2p<>` of Stratus HLS.
-4. 	The directory stratus contains the Stratus HLS project file (project.tcl) and Makefile to run Stratus HLS.
+![The HLS system architecture](hls_system.png)
+
+### SCML Platform
+
+The system architecture of the SCML platform is shown in the figure below where a RAM and a SCML router are involved.
+
+![The SCML system architecture](scml_platform.png)
+
+The figure below shows the dataflow of the platform. The input is fed into the `Testbench` and is sent to the computation kernal `Edge detection filter` through the SCML router. After the computation, the results are written to `RAM` again through the router and dump a output bitmap.
+
+![The dataflow on the SCML platform](scml_platform.png)
 
 ## Implemantation and Optimizations
 
