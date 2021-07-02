@@ -50,6 +50,35 @@ In the `Testbench.cpp` and `GaussianBlur.cpp` we use read() and write() function
         o_green.write(green);
         o_blue.write(blue);
     }
+    
+The connections of the FIFO channels are implemented in `main.cpp` as follows:
+
+    Testbench tb("tb");
+    GaussianBlur gaussian_blur("gaussian_blur");
+    sc_clock clk("clk", CLOCK_PERIOD, SC_NS);
+    sc_signal<bool> rst("rst");
+    sc_fifo<unsigned char> r;
+    sc_fifo<unsigned char> g;
+    sc_fifo<unsigned char> b;
+    sc_fifo<double> red;
+    sc_fifo<double> green;
+    sc_fifo<double> blue;
+    tb.i_clk(clk);
+    tb.o_rst(rst);
+    gaussian_blur.i_clk(clk);
+    gaussian_blur.i_rst(rst);
+    tb.o_r(r);
+    tb.o_g(g);
+    tb.o_b(b);
+    tb.i_red(red);
+    tb.i_green(green);
+    tb.i_blue(blue);
+    gaussian_blur.i_r(r);
+    gaussian_blur.i_g(g);
+    gaussian_blur.i_b(b);
+    gaussian_blur.o_red(red);
+    gaussian_blur.o_green(green);
+    gaussian_blur.o_blue(blue);
 
 ## How to execute the codes
 
