@@ -24,11 +24,11 @@ The system architecture of the HLS platform is shown in the figure below. Only t
 
 The system architecture of the SCML platform is shown in the figure below where a RAM and a SCML router are involved.
 
-![The SCML system architecture](scml_platform.png)
+![The SCML system architecture](scml_system.png)
 
 The figure below shows the dataflow of the platform. The input is fed into the `Testbench` and is sent to the computation kernal `Edge detection filter` through the SCML router. After the computation, the results are written to `RAM` again through the router and dump a output bitmap.
 
-![The dataflow on the SCML platform](scml_platform.png)
+![The dataflow on the SCML platform](dataflow.png)
 
 ## Implemantation and Optimizations
 
