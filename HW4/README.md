@@ -20,6 +20,20 @@ The TLM simplebus shown above has a master module and a slave module. The TLM so
     bus.setDecode(0, GAUSSIAN_MM_BASE, GAUSSIAN_MM_BASE + GAUSSIAN_MM_SIZE - 1);
     bus.i_skt[0](gaussian_blur.t_skt);
 
+## How to execute the codes
+
+1.  Compile the program
+
+        $ mkdir build
+        $ cd build
+        $ cmake ..
+        $ make
+
+2.  Run the model program
+
+        $ make run
+
+
 ## Result
 
 |Input Bitmap | Output Bitmap|
