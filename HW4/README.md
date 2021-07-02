@@ -6,7 +6,7 @@ In HW 3, we have wrapped the Gaussian blur and testbench modules with TLM 2.0 so
 
 The system architecture uses the TLM transaction and a TLM simpleBus to transfer the data in between as shown in the figure below.
 
-<div align="center"> <img src="hw4.png" width="80%"/> </div>
+<div align="center"> <img src="hw4.png" width="60%"/> </div>
 
 ## Implementation
 
