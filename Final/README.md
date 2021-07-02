@@ -31,7 +31,7 @@ The relative architecture design for 16-pt DIF FFT which has 4 stages is shown i
 
 Each cross in the figure above is the basic computation unit of this architecture, which is called "Butterfly." Each butterfly has 2 complex inputs and 2 complex outputs, which involves in a multiplication with TFs and 2 additions. The block diagram of it is shown below.
 
-<div align="center"> <img src="butterfly.png" width="50%"/> </div>
+<div align="center"> <img src="butterfly.png" width="30%"/> </div>
 
 The order of inputs in this DIF FFT algorithm is in order. Nevertheless, the ouputs are in bit-reversed order. Thus, we'll need a re-order module to get the outputs in order.
 
