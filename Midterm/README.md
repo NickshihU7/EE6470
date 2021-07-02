@@ -52,20 +52,20 @@ The figure below shows the dataflow of the platform. The input is fed into the `
 				sc_dt::sc_uint<8> green_read;
 				sc_dt::sc_uint<8> blue_read;
 	    #ifndef NATIVE_SYSTEMC
-					{
-						HLS_DEFINE_PROTOCOL("input");
-						red_read = i_r.get();
-						green_read = i_g.get();
-						blue_read = i_b.get();
-						wait();
-					}
+				{
+					HLS_DEFINE_PROTOCOL("input");
+					red_read = i_r.get();
+					green_read = i_g.get();
+					blue_read = i_b.get();
+					wait();
+				}
 	    #else
-					red_read = i_r.read();
-					green_read = i_g.read();
-					blue_read = i_b.read();
+				red_read = i_r.read();
+				green_read = i_g.read();
+				blue_read = i_b.read();
 	    #endif
-					red += red_read * filter[v][u];
-	        green += green_read * filter[v][u];
+				red += red_read * filter[v][u];
+	        	green += green_read * filter[v][u];
 			    blue += blue_read * filter[v][u];
 				}
 			}
