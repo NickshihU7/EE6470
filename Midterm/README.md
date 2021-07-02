@@ -18,7 +18,7 @@ To adapt the filter to the input image, convolution is used here as shown in the
 
 The system architecture of the HLS platform is shown in the figure below. Only the kernal block, edge detection filter, is synthesized. The inputs and outputs are fed and fetched in splited R, G, and B channels.
 
-![The HLS system architecture](hls_system.png)
+<img src="hls_system.png" width="50%"/>
 
 ### SCML Platform
 
