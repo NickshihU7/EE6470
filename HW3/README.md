@@ -1,12 +1,12 @@
-# Gaussian Blur with TLM-2.0 interfaces
+# Gaussian Blur with FIFO channels and row buffers
 
-In this homework we will wrap the Gaussian blur and testbench modules with TLM 2.0 sockets. And all modules will be connected through point-to-point TLM.
+The goal is to implement a Gaussian blur filter with SystemC modules connected with SystemC FIFO channels. In addition, we'd like to send in batch a row or a column of image pixels from Input to Calculation.
 
 ## System Architecture
 
 The system architecture uses the TLM 2.0 sockets, including initiator and target sockets, to realize point-to-point connection between modules as shown in the figure below. The module `Testbench` works as TLM initiators, and the `GaussianBlur` plays the role of the TLM target.
 
-<div align="center"> <img src="hw3.png" width="60%"/> </div>
+<div align="center"> <img src="hw2.png" width="60%"/> </div>
 
 ## Implementation
 
@@ -64,7 +64,18 @@ In Testbench's implementation, we initiate write transactions through the initia
         }
     }
 
+## How to execute the codes
 
+1.  Compile the program
+
+        $ mkdir build
+        $ cd build
+        $ cmake ..
+        $ make
+
+2.  Run the model program
+
+        $ make run
 
 ## Result
 
