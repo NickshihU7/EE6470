@@ -145,7 +145,7 @@ The figure below shows the dataflow of the platform. The input is fed into the `
 
 ## How to execute the codes
 
--	First of all, go to the directory of each version.
+-	First of all, go to the directory of one of the version.
 
 		$ cd $Midterm/Baseline
 		$ cd $Midterm/LoopUnrolling
