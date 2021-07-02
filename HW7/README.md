@@ -10,9 +10,9 @@ The system architecture is similar to the one in HW4, which uses the TLM transac
 
 To make it run parallelly, the 16-pt inputs are partitioned into two 8-pt inputs for both real and imaginary parts. In addition, the 16-pts DIF FFT is replaced with two 8-pt DIF FFT. The way to partition the input data is as follows.
 	
-	int length = 16;
-  	int start_length = length / PROCESSORS * hart_id, end_length = length / PROCESSORS * hart_id + length / PROCESSORS;
-  	for(int i = start_length; i < end_length; i++){
+	int start_width = width / PROCESSORS * hart_id, end_width = width / PROCESSORS * hart_id + width / PROCESSORS;
+    unsigned char  buffer[4] = {0};
+    for(int i = start_width; i < end_width; i++){
 		.
 		.
 		.
@@ -33,8 +33,8 @@ The TLM simplebus shown above has 4 master modules and 7 slave modules. The TLM 
 	bus.isocks[1].bind(clint.tsock);
 	bus.isocks[2].bind(sys.tsock);
 	bus.isocks[3].bind(dma.tsock);
-	bus.isocks[4].bind(two_D_FFT0.tsock);
-	bus.isocks[5].bind(two_D_FFT1.tsock);
+	bus.isocks[4].bind(gaussian_blur0.tsock);
+	bus.isocks[5].bind(gaussian_blur1.tsock);
 	bus.isocks[6].bind(plic.tsock);
 
 ## Implementations
