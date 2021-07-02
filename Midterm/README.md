@@ -6,7 +6,7 @@ In this project we're going to synthesize the kernel function of the edge detect
 
 Obviously, the purpose of edge detection filter is to detect the edges on a picture in all directions. To achieve this, the filter has to detect the four directions of the edges, including vertical, horizontal, 45 degree, and -45 degree. Thus, an edge detection filter is actually a combination of four filters as shown in the figure below.
 
-![Edge detection algo.](edge.png)
+![Edge detection algo.](edge.jpg)
 
 To adapt the filter to the input image, convolution is used here as shown in the following figure.
 
