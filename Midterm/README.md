@@ -4,7 +4,13 @@ In this project we're going to synthesize the kernel function of the edge detect
 
 ## The Edge Detection Filter
 
+Obviously, the purpose of edge detection filter is to detect the edges on a picture in all directions. To achieve this, the filter has to detect the four directions of the edges, including vertical, horizontal, 45 degree, and -45 degree. Thus, an edge detection filter is actually a combination of four filters as shown in the figure below.
 
+![Edge detection algo.](edge.png)
+
+To adapt the filter to the input image, convolution is used here as shown in the following figure.
+
+![Convolution](conv.png)
 
 ## System Architecture
 
@@ -110,7 +116,7 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 -	The synthesized results of simulated time lie in the table below:
 
 	|                 | sim_B | sim_V_BASIC |  sim_V_DPA  |
-	| -----------     | -------------: | ---------------: |  ---------------: |
+	| -----------     | :------------: | ---------------: |  ---------------: |
 	| Baseline  	  |    26214450 ns |      43909110 ns |       38010870 ns |
 	| Loop Unrolling  |    26214450 ns |      36044790 ns |       30146550 ns |
 	| Loop Pipelining |    26214450 ns |       2621990 ns |        1966620 ns |
