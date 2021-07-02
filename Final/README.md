@@ -235,8 +235,8 @@ The fft kernal is implemented as a arithmatic block on the HLS platform to get a
 
 -	Go to one of the following working directory.
 
-		$ cd Final/riscv-vp/vp/sw/fft-single
-		$ cd Final/riscv-vp/vp/sw/fft-dual
+		$ cd Final/riscv-vp/sw/fft-single
+		$ cd Final/riscv-vp/sw/fft-dual
 
 -	Compile and Run simulaitons.
 
