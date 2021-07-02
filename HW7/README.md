@@ -8,7 +8,7 @@ The system architecture is similar to the one in HW4, which uses the TLM transac
 
 <div align="center"> <img src="hw7.png" width="80%"/> </div>
 
-To make it run parallelly, the 16-pt inputs are partitioned into two 8-pt inputs for both real and imaginary parts. In addition, the 16-pts DIF FFT is replaced with two 8-pt DIF FFT. The way to partition the input data is as follows.
+To make it run parallelly, the 256x256 input matrix of bitmap is partitioned into two 128x256 matrixes. The way to partition the input data is as follows.
 	
 	int start_width = width / PROCESSORS * hart_id, end_width = width / PROCESSORS * hart_id + width / PROCESSORS;
     unsigned char  buffer[4] = {0};
