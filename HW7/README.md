@@ -164,7 +164,7 @@ The TLM simplebus shown above has 4 master modules and 7 slave modules. The TLM 
 
 ## How to execute the codes
 
--	Build the platforms of RISC-V VP.
+-	Build the `tiny32-mc` platform of RISC-V VP.
 
 		$ cd HW7/vp
 		$ mkdir build
