@@ -89,9 +89,11 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 
 ## How to execute the codes
 
--	First of all, go to the stratus directory for each of the version.
+-	First of all, go to the directory of each version.
 
-		$ cd $Midterm/Splited/stratus
+		$ cd $Midterm/Baseline
+		$ cd $Midterm/LoopUnrolling
+		$ cd $Midterm/Looppipelining
 
 -	Run behavioral simulation.
 
