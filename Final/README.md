@@ -69,7 +69,7 @@ The fft kernal is implemented as a arithmatic block on the HLS platform to get a
 		    )
 		{
 
-		   	// Variable declarations
+			// Variable declarations
 		     sc_int<17> tmp_real1;
 		     sc_int<17> tmp_imag1;
 		     sc_int<17> tmp_real2;
