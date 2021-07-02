@@ -32,71 +32,116 @@ The figure below shows the dataflow of the platform. The input is fed into the `
 
 ## Implemantation and Optimizations
 
-1.	In the system.h:
+### The Implementation of The Edge Detection Filter
 
+-	The edge detection filter is defined in EdgeDetection.cpp:
+
+		// Edge detection filter
+		const int filter[filterHeight][filterWidth] =
+		{
+		  {-1, -1, -1},
+		  {-1, 8, -1},
+		  {-1, -1, -1}
+		};
+
+-	The edge detection filter kernal applies the filter to the input R, G, and B, and sends out the output:
+
+		for (unsigned int v = 0; v<filterHeight; ++v) {
+			for (unsigned int u = 0; u<filterWidth; ++u) {
+				sc_dt::sc_uint<8> red_read;
+				sc_dt::sc_uint<8> green_read;
+				sc_dt::sc_uint<8> blue_read;
+	    #ifndef NATIVE_SYSTEMC
+					{
+						HLS_DEFINE_PROTOCOL("input");
+						red_read = i_r.get();
+						green_read = i_g.get();
+						blue_read = i_b.get();
+						wait();
+					}
+	    #else
+					red_read = i_r.read();
+					green_read = i_g.read();
+					blue_read = i_b.read();
+	    #endif
+					red += red_read * filter[v][u];
+	        green += green_read * filter[v][u];
+			    blue += blue_read * filter[v][u];
+				}
+			}
+	    #ifndef NATIVE_SYSTEMC
+			{
+				HLS_DEFINE_PROTOCOL("output");
+				o_red.put(red);
+				o_green.put(green);
+				o_blue.put(blue);
+				wait();
+			}
+	    #else
+	    o_red.write(red);
+	    o_green.write(green);
+	    o_blue.write(blue);
+	    #endif
+
+### The Optimizations on The Kernal
+
+1.	Loop Unrolling:
+
+	In this version of optimization, the inner for loop indexed by `u` below is unrolled by a factor of 3 in conservative mode. By doing so, the hardware for this part is trippled and run fully parallelly.
+
+		for (unsigned int v = 0; v<filterHeight; ++v) {
+			for (unsigned int u = 0; u<filterWidth; ++u) {
+				sc_dt::sc_uint<8> red_read;
+				sc_dt::sc_uint<8> green_read;
+				sc_dt::sc_uint<8> blue_read;
 		#ifndef NATIVE_SYSTEMC
-			GaussianBlur_wrapper gaussian_blur;
+				{
+					HLS_DEFINE_PROTOCOL("input");
+					red_read = i_r.get();
+					green_read = i_g.get();
+					blue_read = i_b.get();
+					wait();
+				}
 		#else
-			GaussianBlur gaussian_blur;
+				red_read = i_r.read();
+				green_read = i_g.read();
+				blue_read = i_b.read();
 		#endif
-			sc_clock clk;
-			sc_signal<bool> rst;
+				HLS_UNROLL_LOOP(CONSERVATIVE,3,"conv_loop");
+				red += red_read * filter[v][u];
+		        green += green_read * filter[v][u];
+		        blue += blue_read * filter[v][u];
+			}
+		}
+
+2.	Loop Pipelining:
+
+	In this version of optimization, the nested for loops shown below is pipelined with the interval of 2 cycles. In this way, the critical path can be shorten, and thus the hardware can run faster. 
+
+		HLS_PIPELINE_LOOP(HARD_STALL,2,"conv_loop_pipeline");
+		for (unsigned int v = 0; v<filterHeight; ++v) {
+			for (unsigned int u = 0; u<filterWidth; ++u) {
+				sc_dt::sc_uint<8> red_read;
+				sc_dt::sc_uint<8> green_read;
+				sc_dt::sc_uint<8> blue_read;
 		#ifndef NATIVE_SYSTEMC
-			cynw_p2p< sc_dt::sc_uint<24> > rgb;
-			cynw_p2p< sc_dt::sc_uint<32> > red;
-			cynw_p2p< sc_dt::sc_uint<32> > green;
-			cynw_p2p< sc_dt::sc_uint<32> > blue;
+				{
+					HLS_DEFINE_PROTOCOL("input");
+					red_read = i_r.get();
+					green_read = i_g.get();
+					blue_read = i_b.get();
+					wait();
+				}
 		#else
-			sc_fifo< sc_dt::sc_uint<24> > rgb;
-			sc_fifo< sc_dt::sc_uint<32> > red;
-			sc_fifo< sc_dt::sc_uint<32> > green;
-			sc_fifo< sc_dt::sc_uint<32> > blue;
+				red_read = i_r.read();
+				green_read = i_g.read();
+				blue_read = i_b.read();
 		#endif
-
-2.	In the Testbench.h:
-
-		#ifndef NATIVE_SYSTEMC
-			cynw_p2p< sc_dt::sc_uint<24> >::base_out o_rgb;
-			cynw_p2p< sc_dt::sc_uint<32> >::base_in i_red;
-			cynw_p2p< sc_dt::sc_uint<32> >::base_in i_green;
-			cynw_p2p< sc_dt::sc_uint<32> >::base_in i_blue;
-		#else
-			sc_fifo_out< sc_dt::sc_uint<24> > o_rgb;
-			sc_fifo_in< sc_dt::sc_uint<32> > i_red;
-			sc_fifo_in< sc_dt::sc_uint<32> > i_green;
-			sc_fifo_in< sc_dt::sc_uint<32> > i_blue;
-		#endif
-
-3.	In the GaussianBlur.cpp:
-
-		#ifndef NATIVE_SYSTEMC
-			cynw_p2p< sc_dt::sc_uint<24> >::in i_rgb;
-			cynw_p2p< sc_dt::sc_uint<32> >::out o_red;
-			cynw_p2p< sc_dt::sc_uint<32> >::out o_green;
-			cynw_p2p< sc_dt::sc_uint<32> >::out o_blue;
-		#else
-			sc_fifo_in< sc_dt::sc_uint<24> > i_rgb;
-			sc_fifo_out< sc_dt::sc_uint<32> > o_red;
-			sc_fifo_out< sc_dt::sc_uint<32> > o_green;
-			sc_fifo_out< sc_dt::sc_uint<32> > o_blue;
-		#endif
-
-4.	In the Testbench.cpp and GaussianBlur.cpp, the read() and write() functions are replaced with get() and put() functions. For example:
-
-		#ifndef NATIVE_SYSTEMC
-			o_rgb.put(rgb);
-		#else
-			o_rgb.write(rgb);
-		#endif
-		#ifndef NATIVE_SYSTEMC
-			red = i_red.get();
-		    green = i_green.get();
-		    blue = i_blue.get();
-		#else
-			red = i_red.read();
-		    green = i_green.read();
-		    blue = i_blue.read();
-		#endif
+				red += red_read * filter[v][u];
+        green += green_read * filter[v][u];
+        blue += blue_read * filter[v][u];
+			}
+		}
 
 ## How to execute the codes
 
@@ -140,6 +185,8 @@ The figure below shows the dataflow of the platform. The input is fed into the `
 	| Loop Unrolling  |    4571 |      4567 |
 	| Loop Pipelining |    9174 |     16887 |
 
+	According to the results above, the one with loop pipelining has the best performance in terms of speed. However, at the same time, it consume the most hardware resource.
+
 -	The RTL analysis for BASIC configuration.
 
 	<div align="center"> <img src="result_basic.png" width="100%"/> </div>
@@ -171,8 +218,9 @@ The figure below shows the dataflow of the platform. The input is fed into the `
 			return true;
 		}
 
-	And we'll get a more accurate simulated time of the entire system.
+	And we finally get a more accurate simulated time of the entire system.
 
-		Simulated time:
+		Simulated time: 128885768212 ns
+
 
 
