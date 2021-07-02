@@ -89,9 +89,9 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 
 ## How to execute the codes
 
--	First of all, go to the stratus directory.
+-	First of all, go to the stratus directory for each of the version.
 
-		$ cd $HW5/Splited/stratus
+		$ cd $Midterm/Splited/stratus
 
 -	Run behavioral simulation.
 
@@ -107,12 +107,21 @@ The system architecture is similar as the one in HW2, as shown in the figure bel
 
 ## Results
 
--	The synthesized results lies in the table below:
-	| Configuration | Simulated time | Synthesized Area |
-	| -----------   | -------------: | ---------------: |
-	| sim_B        	|    26214450 ns |             None |
-	| sim_V_BASIC   |    43909110 ns |             3984 |
-	| sim_V_DPA     |    38010870 ns |             3420 |
+-	The synthesized results of simulated time lie in the table below:
+
+	|                 | sim_B | sim_V_BASIC |  sim_V_DPA  |
+	| -----------     | -------------: | ---------------: |  ---------------: |
+	| Baseline  	  |    26214450 ns |      43909110 ns |       38010870 ns |
+	| Loop Unrolling  |    26214450 ns |      36044790 ns |       30146550 ns |
+	| Loop Pipelining |    26214450 ns |       2621990 ns |        1966620 ns |
+	
+-	And the table below shows the synthesized results of area:
+
+	|                 | sim_V_BASIC |  sim_V_DPA  |
+	| -----------     | ------: | --------: |
+	| Baseline  	  |    3984 |      3420 |
+	| Loop Unrolling  |    4571 |      4567 |
+	| Loop Pipelining |    9174 |     16887 |
 
 -	The RTL analysis for BASIC configuration.
 
