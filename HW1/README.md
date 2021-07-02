@@ -10,6 +10,7 @@ The SystemC module contains the following three process:
 ## Gaussian Blur Filter
 
 Bluring is one of the basic and popular image processing filter. The bluring can be achieved in several ways, while the Gaussian blur filter gives a smoother blur. With a gaussian kernel, the value exponentially decreases as we go away from the center. The formula is: 
+
     G(x) = exp(-x * x / 2 * sigma * sigma) / sqrt(2 * pi * sigma * sigma)
 
 For example, an exact approximated 3x3 Gaussian blur filter is defined as:
