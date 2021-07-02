@@ -97,8 +97,7 @@ In the `Testbench.cpp` and `GaussianBlur.cpp` we use read() and write() function
 
 |Input Bitmap | Sigma = 1| Sigma = 3 | Sigma = 10
 |---------------|---------------|---------------|---------------|
-|<div align="center"> <img src="lena.bmp" width="128px"/> </div>|![o](lena_gaussian_1.bmp)|![o](lena_gaussian_3.bmp)|![o](lena_gaussian_10.bmp)|
-
+|<div align="center"> <img src="lena.bmp" width="128px"/> </div>|<div align="center"> <img src="lena_gaussian_1.bmp" width="128px"/> </div>|<div align="center"> <img src="lena_gaussian_3.bmp" width="128px"/> </div>|<div align="center"> <img src="lena_gaussian_10.bmp" width="128px"/> </div>
 
 ## Conclusion
 
