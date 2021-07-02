@@ -1,8 +1,6 @@
 # Midterm Project - Edge Detection Filter
 
-## The goal of this Project
-
-The goal is to synthesize the kernel function of the edge detection filter and annotate the timing back to the SCML platform to get a more accurate simulated time of the entire system.
+In this project we're going to synthesize the kernel function of the edge detection filter and annotate the timing back to the SCML platform to get a more accurate simulated time of the entire system.
 
 ## The Edge Detection Filter
 
