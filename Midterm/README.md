@@ -142,11 +142,11 @@ The figure below shows the dataflow of the platform. The input is fed into the `
 
 -	The RTL analysis for BASIC configuration.
 
-	<div align="center"> <img src="result_basic.png" width="70%"/> </div>
+	<div align="center"> <img src="result_basic.png" width="100%"/> </div>
 
 -	The RTL analysis for DPA configuration.
 
-	<div align="center"> <img src="result_dpa.png" width="70%"/> </div>
+	<div align="center"> <img src="result_dpa.png" width="100%"/> </div>
 
 -	Finally, annotate the timing back to the SCML platform as follows:
 
