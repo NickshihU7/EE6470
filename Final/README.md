@@ -45,6 +45,25 @@ The system architecture is similar to the one in HW4, which uses the TLM transac
 
 To make it run parallelly, the 16-pt inputs are splited into two 8-pt inputs for both real and imaginary parts. In addition, the 16-pts DIF FFT is replaced with two 8-pt DIF FFT.
 
+The TLM simplebus shown above has 4 master modules and 7 slave modules. The TLM socket binding is as follows:
+
+	core0_mem_if.isock.bind(bus.tsocks[0]);
+	core1_mem_if.isock.bind(bus.tsocks[1]);
+	dbg_if.isock.bind(bus.tsocks[2]);
+
+	PeripheralWriteConnector dma_connector("SimpleDMA-Connector");  // to respect ISS bus locking
+	dma_connector.isock.bind(bus.tsocks[3]);
+	dma.isock.bind(dma_connector.tsock);
+	dma_connector.bus_lock = bus_lock;
+
+	bus.isocks[0].bind(mem.tsock);
+	bus.isocks[1].bind(clint.tsock);
+	bus.isocks[2].bind(sys.tsock);
+	bus.isocks[3].bind(dma.tsock);
+	bus.isocks[4].bind(two_D_FFT0.tsock);
+	bus.isocks[5].bind(two_D_FFT1.tsock);
+	bus.isocks[6].bind(plic.tsock);
+
 ### HLS Platform
 
 The fft kernal is implemented as a arithmatic block on the HLS platform to get a more accurate simulated time. The system architecture is shown below.
