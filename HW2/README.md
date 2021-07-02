@@ -4,64 +4,51 @@ The goal is to implement a Gaussian blur filter with SystemC modules connected w
 
 ## System Architecture
 
-The system architecture uses the TLM 2.0 sockets, including initiator and target sockets, to realize point-to-point connection between modules as shown in the figure below. The module `Testbench` works as TLM initiators, and the `GaussianBlur` plays the role of the TLM target.
+The sc_modules, `Testbench` and `GaussianBlur`, are connected with the sc_fifo channels as shown in the figure below.
 
 <div align="center"> <img src="hw2.png" width="60%"/> </div>
 
 ## Implementation
 
-The TLM socket biding between the two modules `Testbench` and `GaussianBlur` is implemented as follows:
+`Testbench` sends the input R, G, and B via 3 different sc_fifo channels to `GaussianBlur`. After the operation of convolution, `GaussianBlur`sends back the output R, G, and B via another 3 different sc_fifo channels to `Testbench`. The declaration of the fifo channels are as follows.
 
-    Testbench tb("tb");
-    GaussianBlur gaussian_filter("gaussian_filter");
-    tb.initiator.i_skt(gaussian_filter.t_skt);
+In the `Testbench.h` we have:
 
-In Testbench's implementation, we initiate write transactions through the initiator socket in Initiator module to put the pixels to be processed by GaussianBlur, and then initiator read transactions to get the results. The correspoding codes are written in `Teatbench.cpp` as follows.
+    sc_out<bool> o_rst;
+    sc_fifo_out<unsigned char> o_r;
+    sc_fifo_out<unsigned char> o_g;
+    sc_fifo_out<unsigned char> o_b;
+    sc_fifo_in<double> i_red;
+    sc_fifo_in<double> i_green;
+    sc_fifo_in<double> i_blue;
 
-    for (y = 0; y != height; ++y) {
-        for (x = 0; x != width; ++x) {
-            adjustX = (filterWidth % 2) ? 1 : 0; // 1
-            adjustY = (filterHeight % 2) ? 1 : 0; // 1
-            xBound = filterWidth / 2;            // 1
-            yBound = filterHeight / 2;            // 1
+And in the `GaussianBlur.h` we have:
 
-            for (v = -yBound; v != yBound + adjustY; ++v) {   //-1, 0, 1
-                for (u = -xBound; u != xBound + adjustX; ++u) { //-1, 0, 1
-                if (x + u >= 0 && x + u < width && y + v >= 0 && y + v < height) {
-                    R = *(source_bitmap +
-                        bytes_per_pixel * (width * (y + v) + (x + u)) + 2);
-                    G = *(source_bitmap +
-                        bytes_per_pixel * (width * (y + v) + (x + u)) + 1);
-                    B = *(source_bitmap +
-                        bytes_per_pixel * (width * (y + v) + (x + u)) + 0);
-                } else {
-                    R = 0;
-                    G = 0;
-                    B = 0;
-                }
-                data.uc[0] = R;
-                data.uc[1] = G;
-                data.uc[2] = B;
-                mask[0] = 0xff;
-                mask[1] = 0xff;
-                mask[2] = 0xff;
-                mask[3] = 0;
-                initiator.write_to_socket(GAUSSIAN_FILTER_R_ADDR, mask, data.uc, 4);
-                }
+    sc_in<bool> i_rst;
+    sc_fifo_in<unsigned char> i_r;
+    sc_fifo_in<unsigned char> i_g;
+    sc_fifo_in<unsigned char> i_b;
+    sc_fifo_out<double> o_red;
+    sc_fifo_out<double> o_green;
+    sc_fifo_out<double> o_blue;
+
+In the `Testbench.cpp` and `GaussianBlur.cpp` we use read() and write() functions to fetch and send data through sc_fifo channels. For example:
+
+    while (true) {
+        red = 0;
+        green = 0;
+        blue = 0;
+        for (unsigned int v = 0; v < filterHeight; ++v) {
+            for (unsigned int u = 0; u < filterWidth; ++u) {
+                red += i_r.read() * filter[v][u];
+                green += i_g.read() * filter[v][u];
+                blue += i_b.read() * filter[v][u];
+                wait();
             }
-
-            initiator.read_from_socket(GAUSSIAN_FILTER_RESULT_ADDR1, mask, data.uc, 4);
-            red = data.uint;
-            initiator.read_from_socket(GAUSSIAN_FILTER_RESULT_ADDR2, mask, data.uc, 4);
-            green = data.uint;
-            initiator.read_from_socket(GAUSSIAN_FILTER_RESULT_ADDR3, mask, data.uc, 4);
-            blue = data.uint;
-
-            //truncate values smaller than zero and larger than 255
-            *(target_bitmap + bytes_per_pixel * (width * y + x) + 2) = min(max(int(factor * red + bias), 0), 255);
-            *(target_bitmap + bytes_per_pixel * (width * y + x) + 1) = min(max(int(factor * green + bias), 0), 255);
-            *(target_bitmap + bytes_per_pixel * (width * y + x) + 0) = min(max(int(factor * blue + bias), 0), 255);
         }
+        o_red.write(red);
+        o_green.write(green);
+        o_blue.write(blue);
     }
 
 ## How to execute the codes
@@ -77,14 +64,13 @@ In Testbench's implementation, we initiate write transactions through the initia
 
         $ make run
 
-
 ## Result
 
 |Input Bitmap | Output Bitmap|
 |---------------|---------------|
-|![i](lena_std_short.bmp)|![o](out.bmp)|
+|![i](lena.bmp)|![o](lena_gaussian.bmp)|
 
 
 ## Conclusion
 
-From this HW I learnt how to use TLM 2.0 sockets to manage the point-to-point connection between sc_modules.
+From this HW I learnt how to use FIFO channels to transfer data between SystemC modules.
