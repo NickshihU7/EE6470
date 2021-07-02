@@ -22,6 +22,6 @@ The TLM simplebus shown above has a master module and a slave module. The TLM so
 
 ## Result
 
-|original input | blurred output|
+|Input Bitmap | Output Bitmap|
 |---------------|---------------|
 |![i](lena_std_short.bmp)|![o](out.bmp)|
