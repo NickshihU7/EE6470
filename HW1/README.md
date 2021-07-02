@@ -9,6 +9,27 @@ The SystemC module contains the following three process:
 
 ## Gaussian Blur Filter
 
+Bluring is one of the basic and popular image processing filter. The bluring can be achieved in several ways, while the Gaussian blur filter gives a smoother blur. With a gaussian kernel, the value exponentially decreases as we go away from the center. The formula is: 
+    G(x) = exp(-x * x / 2 * sigma * sigma) / sqrt(2 * pi * sigma * sigma)
+
+For example, an exact approximated 3x3 Gaussian blur filter is defined as:
+
+    #define filterWidth 3
+    #define filterHeight 3
+
+    double filter[filterHeight][filterWidth] =
+    {
+    0.077847, 0.123317, 0.077847,
+    0.123317, 0.195346, 0.123317,
+    0.077847, 0.123317, 0.077847,
+    };
+
+    double factor = 1.0;
+    double bias = 0.0;
+
+To adapt the filter to the input image, convolution is used here as shown in the following figure.
+
+<div align="center"> <img src="conv.png" width="60%"/> </div>
 
 
 ## System Architecture
@@ -101,4 +122,4 @@ In the `Testbench.cpp` and `GaussianBlur.cpp` we use read() and write() function
 
 ## Conclusion
 
-From this HW I learnt how to use FIFO channels to transfer data between SystemC modules.
+From the first HW I got some basic ideas of SystemC, its coding style, and the algorithm of Gaussian blur filter.
