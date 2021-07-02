@@ -150,7 +150,26 @@ The figure below shows the dataflow of the platform. The input is fed into the `
 
 -	Finally, annotate the timing back to the SCML platform as follows:
 
-		Annotating timing
+		bool SobelFilter::ReadResult_r(uint &result_data_r) {
+			result_reg_r = o_red.read();
+			result_data_r = result_reg_r;
+
+			return true;
+		}
+
+		bool SobelFilter::ReadResult_g(uint &result_data_g) {
+			result_reg_g = o_green.read();
+			result_data_g = result_reg_g;
+
+			return true;
+		}
+
+		bool SobelFilter::ReadResult_b(uint &result_data_b) {
+			result_reg_b = o_blue.read();
+			result_data_b = result_reg_b;
+			wait(1966620, SC_NS);
+			return true;
+		}
 
 	And we'll get a more accurate simulated time of the entire system.
 
