@@ -201,7 +201,7 @@ The fft kernal is implemented as a arithmatic block on the HLS platform to get a
 
 -	First of all, go to the stratus directory.
 
-		$ cd $Final/hls/stratus
+		$ cd Final/hls/stratus
 
 -	Run behavioral simulation.
 
