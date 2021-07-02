@@ -25,3 +25,8 @@ The TLM simplebus shown above has a master module and a slave module. The TLM so
 |Input Bitmap | Output Bitmap|
 |---------------|---------------|
 |![i](lena_std_short.bmp)|![o](out.bmp)|
+
+
+## Conclusion
+
+Based on the previous HW, the only difference is the use of TLM simplebus for data transfer. By doing so, we can better modulize each of the master and slave modules.
