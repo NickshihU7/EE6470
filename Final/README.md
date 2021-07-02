@@ -15,7 +15,7 @@ where the twiddle factor (TF)
 
 ![TF](https://latex.codecogs.com/svg.image?W_{nk}^{N}=exp\left&space;(&space;-j\frac{2\pi}{N}nk&space;\right&space;))
 
-The DFT thus has the time complexity of N^2, where the N is the number of inputs, which Hence is inefficient for hardware.
+The DFT thus has the time complexity of N^2, where the N is the number of inputs, which is inefficient for hardware.
 
 Thus, the FFT was proposed for the purpose of making it efficient and more hardware suitable. The decimation-in-frequency (DIF) FFT algorithm is: 
 
