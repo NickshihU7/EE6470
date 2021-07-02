@@ -150,10 +150,10 @@ The figure below shows the dataflow of the platform. The input is fed into the `
 
 -	Finally, annotate the timing back to the SCML platform as follows:
 
-		Simulated time:
+		Annotating timing
 
 	And we'll get a more accurate simulated time of the entire system.
 
-	![The output timing result](simulated_time.png)
+		Simulated time:
 
 
