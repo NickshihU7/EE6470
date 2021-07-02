@@ -323,11 +323,88 @@ The fft kernal is implemented as a arithmatic block on the HLS platform to get a
 			num-instr = 156400
 
 	-	The dual-core version.
+			SystemC 2.3.3-Accellera --- Jun  2 2021 01:43:01
+			Copyright (c) 1996-2018 by all Contributors,
+			ALL RIGHTS RESERVED
+
+			Info: /OSCI/SystemC: Simulation stopped by user.
+			=[ core : 0 ]===========================
+			simulation time: 857210 ns
+			zero (x0) =        0
+			ra   (x1) =    10938
+			sp   (x2) =    18a00
+			gp   (x3) =    30800
+			tp   (x4) =        0
+			t0   (x5) =  2010000
+			t1   (x6) =        1
+			t2   (x7) =        1
+			s0/fp(x8) =        0
+			s1   (x9) =        0
+			a0  (x10) =        0
+			a1  (x11) =    30a08
+			a2  (x12) =    30a04
+			a3  (x13) =        2
+			a4  (x14) =        1
+			a5  (x15) =        0
+			a6  (x16) =        0
+			a7  (x17) =       5d
+			s2  (x18) =        0
+			s3  (x19) =        0
+			s4  (x20) =        0
+			s5  (x21) =        0
+			s6  (x22) =        0
+			s7  (x23) =        0
+			s8  (x24) =        0
+			s9  (x25) =        0
+			s10 (x26) =        0
+			s11 (x27) =        0
+			t3  (x28) =        0
+			t4  (x29) =        2
+			t5  (x30) =     8800
+			t6  (x31) =        5
+			pc = 10964
+			num-instr = 25567
+			=[ core : 1 ]===========================
+			simulation time: 857210 ns
+			zero (x0) =        0
+			ra   (x1) =    10938
+			sp   (x2) =    20a00
+			gp   (x3) =    30800
+			tp   (x4) =        0
+			t0   (x5) =    20a00
+			t1   (x6) =        1
+			t2   (x7) =        1
+			s0/fp(x8) =        0
+			s1   (x9) =        0
+			a0  (x10) =        0
+			a1  (x11) =    30a08
+			a2  (x12) =    30a04
+			a3  (x13) =        2
+			a4  (x14) =        1
+			a5  (x15) =        0
+			a6  (x16) =      7e5
+			a7  (x17) =    20990
+			s2  (x18) =        0
+			s3  (x19) =        0
+			s4  (x20) =        0
+			s5  (x21) =        0
+			s6  (x22) =        0
+			s7  (x23) =        0
+			s8  (x24) =        0
+			s9  (x25) =        0
+			s10 (x26) =        0
+			s11 (x27) =        0
+			t3  (x28) =      7e5
+			t4  (x29) =      7e5
+			t5  (x30) =      7e5
+			t6  (x31) =      7e5
+			pc = 1094c
+			num-instr = 32600
 
 	-	To sum up:
 
 		| Configuration | Simulated time |
 		| -----------   | -------------: |
 		| HLS sim_B    	|     2621430 ns |
-		| Sinale core   |    43909110 ns |
-		| Dual-core     |    38010870 ns |
+		| Sinale core   |     5671280 ns |
+		| Dual-core     |      857210 ns |
