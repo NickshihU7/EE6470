@@ -267,5 +267,7 @@ The TLM simplebus shown above has 4 master modules and 7 slave modules. The TLM 
 
     | Configuration | Simulated time |
     | -----------   | -------------: |
-    | Sinale core   |     5671280 ns |
+    | Sinale core   |  3494287520 ns |
     | Dual-core     |  1764293080 ns |
+
+    We can see that the simulated time of the dual-core version is almost exactly half of that of the single core, which is quite ideal.
