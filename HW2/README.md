@@ -6,7 +6,7 @@ The goal is to implement a Gaussian blur filter with SystemC modules connected w
 
 The sc_modules, `Testbench` and `GaussianBlur`, are connected with the sc_fifo channels as shown in the figure below.
 
-<div align="center"> <img src="hw2.png" width="60%"/> </div>
+<div align="center"> <img src="hw2.png" width="50%"/> </div>
 
 ## Implementation
 
