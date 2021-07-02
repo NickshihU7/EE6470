@@ -41,7 +41,7 @@ The order of inputs in this DIF FFT algorithm is in order. Nevertheless, the oup
 
 The system architecture is similar to the one in HW4, which uses the TLM transaction and a simpleBus to transfer the data in between as shown in the figure below. In addition, a direct memory access (DMA) module is involved to provide a faster data transfer.
 
-![The system architecture](final.png)
+<div align="center"> <img src="fft_riscv.png" width="60%"/> </div>
 
 To make it run parallelly, the 16-pt inputs are splited into two 8-pt inputs for both real and imaginary parts. In addition, the 16-pts DIF FFT is replaced with two 8-pt DIF FFT.
 
