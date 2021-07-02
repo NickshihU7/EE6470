@@ -281,46 +281,46 @@ The fft kernal is implemented as a arithmatic block on the HLS platform to get a
 	-	The single core version.
 
 			    SystemC 2.3.3-Accellera --- Jun  2 2021 01:43:01
-		Copyright (c) 1996-2018 by all Contributors,
-		ALL RIGHTS RESERVED
+			Copyright (c) 1996-2018 by all Contributors,
+			ALL RIGHTS RESERVED
 
-		Info: /OSCI/SystemC: Simulation stopped by user.
-		=[ core : 0 ]===========================
-		simulation time: 5671280 ns
-		zero (x0) =        0
-		ra   (x1) =    4fa9c
-		sp   (x2) =  1ffffec
-		gp   (x3) =    9a498
-		tp   (x4) =        0
-		t0   (x5) =        0
-		t1   (x6) =        3
-		t2   (x7) =        1
-		s0/fp(x8) =        0
-		s1   (x9) =        0
-		a0  (x10) =        0
-		a1  (x11) =        0
-		a2  (x12) =      c59
-		a3  (x13) =        0
-		a4  (x14) =        0
-		a5  (x15) =        0
-		a6  (x16) =        1
-		a7  (x17) =       5d
-		s2  (x18) =        0
-		s3  (x19) =        0
-		s4  (x20) =        0
-		s5  (x21) =        0
-		s6  (x22) =        0
-		s7  (x23) =        0
-		s8  (x24) =        0
-		s9  (x25) =        0
-		s10 (x26) =        0
-		s11 (x27) =        0
-		t3  (x28) =        0
-		t4  (x29) =        0
-		t5  (x30) =     8800
-		t6  (x31) =        5
-		pc = 662d0
-		num-instr = 156400
+			Info: /OSCI/SystemC: Simulation stopped by user.
+			=[ core : 0 ]===========================
+			simulation time: 5671280 ns
+			zero (x0) =        0
+			ra   (x1) =    4fa9c
+			sp   (x2) =  1ffffec
+			gp   (x3) =    9a498
+			tp   (x4) =        0
+			t0   (x5) =        0
+			t1   (x6) =        3
+			t2   (x7) =        1
+			s0/fp(x8) =        0
+			s1   (x9) =        0
+			a0  (x10) =        0
+			a1  (x11) =        0
+			a2  (x12) =      c59
+			a3  (x13) =        0
+			a4  (x14) =        0
+			a5  (x15) =        0
+			a6  (x16) =        1
+			a7  (x17) =       5d
+			s2  (x18) =        0
+			s3  (x19) =        0
+			s4  (x20) =        0
+			s5  (x21) =        0
+			s6  (x22) =        0
+			s7  (x23) =        0
+			s8  (x24) =        0
+			s9  (x25) =        0
+			s10 (x26) =        0
+			s11 (x27) =        0
+			t3  (x28) =        0
+			t4  (x29) =        0
+			t5  (x30) =     8800
+			t6  (x31) =        5
+			pc = 662d0
+			num-instr = 156400
 
 	-	The dual-core version.
 
