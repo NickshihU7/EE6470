@@ -64,6 +64,18 @@ In Testbench's implementation, we initiate write transactions through the initia
         }
     }
 
+## How to execute the codes
+
+1.  Compile the program
+
+        $ mkdir build
+        $ cd build
+        $ cmake ..
+        $ make
+
+2.  Run the model program
+
+        $ make run
 
 
 ## Result
