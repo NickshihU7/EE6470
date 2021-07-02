@@ -43,7 +43,15 @@ The system architecture is similar to the one in HW4, which uses the TLM transac
 
 <div align="center"> <img src="fft_riscv.png" width="80%"/> </div>
 
-To make it run parallelly, the 16-pt inputs are splited into two 8-pt inputs for both real and imaginary parts. In addition, the 16-pts DIF FFT is replaced with two 8-pt DIF FFT.
+To make it run parallelly, the 16-pt inputs are partitioned into two 8-pt inputs for both real and imaginary parts. In addition, the 16-pts DIF FFT is replaced with two 8-pt DIF FFT. The way to partition the input data is as follows.
+	
+	int length = 16;
+  	int start_length = length / PROCESSORS * hart_id, end_length = length / PROCESSORS * hart_id + length / PROCESSORS;
+  	for(int i = start_length; i < end_length; i++){
+		.
+		.
+		.
+	}
 
 The TLM simplebus shown above has 4 master modules and 7 slave modules. The TLM socket binding is as follows:
 
