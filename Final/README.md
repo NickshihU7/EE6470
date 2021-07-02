@@ -1,8 +1,6 @@
 # Final Project - 1D Fast Fourier Transform (1D FFT)
 
-## The Goal of This Project
-
-The goal is to implement a 16-pt FFT module with a multi-core riscv-vp platform.  
+In the final project, I'm going to implement a 16-pt FFT module with a multi-core riscv-vp platform.  
 In this project, I implemented the FFT core module on both single core platform and multi-core platform to compare the performance between w/ and w/o parallelism. In addition, to get the exact simulated time of the FFT core, a HLS FFT module is also implemented.
 
 ## The algorithm of DIF FFT
@@ -29,11 +27,11 @@ which devides the output terms into even and odd. By doing so on and on for each
 
 The relative architecture design for 16-pt DIF FFT which has 4 stages is shown in the figure below.
 
-![DIF FFT diagram](DIF_FFT.png)
+<div align="center"> <img src="DIF_FFT.png" width="80%"/> </div>
 
 Each cross in the figure above is the basic computation unit of this architecture, which is called "Butterfly." Each butterfly has 2 complex inputs and 2 complex outputs, which involves in a multiplication with TFs and 2 additions. The block diagram of it is shown below.
 
-![Butterfly diagram](butterfly.png)
+<div align="center"> <img src="butterfly.png" width="50%"/> </div>
 
 The order of inputs in this DIF FFT algorithm is in order. Nevertheless, the ouputs are in bit-reversed order. Thus, we'll need a re-order module to get the outputs in order.
 
@@ -212,11 +210,3 @@ To make it run parallelly, the 16-pt inputs are splited into two 8-pt inputs for
 		| HLS sim_B    	|     2621430 ns |
 		| Sinale core   |    43909110 ns |
 		| Dual-core     |    38010870 ns |
-
--	The RTL analysis for BASIC configuration.
-
-	![The BASIC RTL analysis](BASIC.jpeg)
-
--	The RTL analysis for DPA configuration.
-
-	![The DPA RTL analysis](DPA.jpeg)
