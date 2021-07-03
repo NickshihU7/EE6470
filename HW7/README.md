@@ -37,130 +37,105 @@ The TLM simplebus shown above has 4 master modules and 7 slave modules. The TLM 
 	bus.isocks[5].bind(gaussian_blur1.tsock);
 	bus.isocks[6].bind(plic.tsock);
 
-## Implementations
+## Modifications in codes
 
--	The core computation "Butterfly unit", defined as a function "butterfly", can be found in oneD_FFT.cpp as the codes below. In addition, to prevent from the enormous need of hardware resource, the entire module is based on 16-bits fixed point datatype. Hence, every single variable involves in the computation is carefully defined. 
+-	Most of the files remain the same as HW6. In `vp/platform`, another GaussianBlur module is added as mentioned above. In addition, the biggist changes I make lie in the `sw` directory.  
+    
+    A `bootstrap.s` file, which is written in assembly language, is added to handle the cooperation between two cores. Besides, in `main.cpp` semaphore locks and barrier are introduced to avoid race conditions and colliding between two cores. 
 
-		void butterfly
-		    ( const sc_int<16>& w_real  ,
-		      const sc_int<16>& w_imag  , 
-		      const sc_int<16>& real1_in,
-		      const sc_int<16>& imag1_in,
-		      const sc_int<16>& real2_in,
-		      const sc_int<16>& imag2_in,
-		      sc_int<16>& real1_out,
-		      sc_int<16>& imag1_out,
-		      sc_int<16>& real2_out,
-		      sc_int<16>& imag2_out
-		    )
-		{
+    The following codes shows the usage of semaphore locks with a pair of functions `sem_wait(&lock)` and `sem_post(&lock)`.
 
-		    // Variable declarations
-		     sc_int<17> tmp_real1;
-		     sc_int<17> tmp_imag1;
-		     sc_int<17> tmp_real2;
-		     sc_int<17> tmp_imag2;
-		     sc_int<34> tmp_real3;
-		     sc_int<34> tmp_imag3;
-		  
-		    // Begin Computation (fixed-point)
-		    // <s,6,10> = <s,5,10> + <s,5,10>
-		    tmp_real1 = real1_in + real2_in; 
-		    tmp_imag1 = imag1_in + imag2_in;
-		    tmp_real2 = real1_in - real2_in;
-		    tmp_imag2 = imag1_in - imag2_in;
-		    //   <s,13,20> = <s,6,10>*<s,5,10> - <s,6,10>*<s,5,10>
-		    tmp_real3 = tmp_real2*w_real - tmp_imag2*w_imag;
-		    //   <s,13,20> = <s,6,10>*<s,5,10> - <s,6,10>*<s,5,10>
-		    tmp_imag3 = tmp_real2*w_imag + tmp_imag2*w_real; 
-		    // assign the sign-bit(MSB)      
-		    real1_out[15] = tmp_real1[16];
-		    imag1_out[15] = tmp_imag1[16];
-		    // assign the rest of the bits
-		    real1_out.range(14,0) = tmp_real1.range(14,0);
-		    imag1_out.range(14,0) = tmp_imag1.range(14,0);
-		   	// assign the sign-bit(MSB)      
-		    real2_out[15] = tmp_real3[33];
-		    imag2_out[15] = tmp_imag3[33];          
-		   	// assign the rest of the bits
-		    real2_out.range(14,0) = tmp_real3.range(24,10);
-		    imag2_out.range(14,0) = tmp_imag3.range(24,10);
+        unsigned char  buffer[4] = {0};
+        for(int i = start_width; i < end_width; i++){
+            for(int j = 0; j < length; j++){
+            for(int v = -1; v <= 1; v ++){
+                for(int u = -1; u <= 1; u++){
+                if((v + i) >= 0  &&  (v + i ) < width && (u + j) >= 0 && (u + j) < length ){
+                    buffer[0] = *(source_bitmap + bytes_per_pixel * ((j + u) * width + (i + v)) + 2);
+                    buffer[1] = *(source_bitmap + bytes_per_pixel * ((j + u) * width + (i + v)) + 1);
+                    buffer[2] = *(source_bitmap + bytes_per_pixel * ((j + u) * width + (i + v)) + 0);
+                    buffer[3] = 0;
+                }else{
+                    buffer[0] = 0;
+                    buffer[1] = 0;
+                    buffer[2] = 0;
+                    buffer[3] = 0;
+                }
+                sem_wait(&lock);
+                if (hart_id == 0) {
+                    write_data_to_Tiny32mc(GAUSSIAN0_START_ADDR, buffer, 4);
+                } else {
+                    write_data_to_Tiny32mc(GAUSSIAN1_START_ADDR, buffer, 4);
+                }
+                sem_post(&lock);
+                }
+            }
+            
+            sem_wait(&lock);
+            if (hart_id == 0) {
+                read_data_from_Tiny32mc(GAUSSIAN0_READ_ADDR, buffer, 4);
+            } else {
+                read_data_from_Tiny32mc(GAUSSIAN1_READ_ADDR, buffer, 4);
+            }
+            result[i][j][0] = buffer[0];
+            result[i][j][1] = buffer[1];
+            result[i][j][2] = buffer[2];
+            result[i][j][3] = buffer[3];
+            sem_post(&lock);
+            }
+        }
 
-		}
+    The barrier is used to assure all of the cores have finished their jobs so that I can further print out some results as shown below.
 
--	As for the twiddle factor in the calculation of FFT, a recursive method is used here as shown below: 
+        barrier(&barrier_sem, &barrier_lock, &barrier_counter, PROCESSORS);
 
-	    // <'s'/'u',m,n>: is used in comments to denote a fixed point representation
-	    // 's'- signed, 'u'- unsigned, m - no. of integer bits, n - no. of fractional bits
-	    //  N = 16
-	    //  theta = 8.0*atan(1.0)/N; theta = 22.5 degree
+        if (hart_id == 0) {  // Core 0 print first and then others
+            sem_wait(&lock);
+                for(int i = start_width; i < start_width+10; i++){
+            for(int j = 0; j < 10; j++){
+                printf ("[%d %d] %d %d %d %d\n",i,j,result[i][j][0],result[i][j][1],result[i][j][2],result[i][j][3]);
+            }
+            }
+            sem_post(&lock);
+            } else {
+                for (int i = 1; i < PROCESSORS; ++i) {
+            sem_wait(&lock);
+            for(int i = start_width; i < start_width+10; i++){
+                for(int j = 0; j < 10; j++){
+                printf ("[%d %d] %d %d %d %d\n",i,j,result[i][j][0],result[i][j][1],result[i][j][2],result[i][j][3]);
+                }
+            }
+            sem_post(&lock);
+                }
+            }
+        }
 
-       	//  w_real =  cos(theta) = 0.92 (000000.1110101110) <s,5,10>
-            w_real =  942;
+-   Differ from the previous HW, we use a different core `tiny32-mc` here. Thus, the functions used to tranfer data between the application and the basic-acc platform with either DMA or simple memory are modified as below.
 
-       	//  w_imag = -sin(theta) = -0.38(111111.1001111010) <s,5,10>
-            w_imag = -389;
-
-       	//  w_rec_real = 1(0000001.0000000000)
-	   	    w_rec_real = 1024;
-
-       	//  w_rec_real = 0(000000.0000000000)	 
-            w_rec_imag = 0;
-
-	    unsigned short w_index;
-	    w_index = 0;  
-	    for( w_index = 0; w_index < W; ++w_index) 
-	    {
-	    // <s,9,22> = <s,5,10> * <s,5,10>
-	     w_temp1 = w_rec_real*w_real;
-	     w_temp2 = w_rec_imag*w_imag;
-
-	    // <s,9,22> = <s,5,10> * <s,5,10>
-	     w_temp3 = w_rec_real*w_imag;
-	     w_temp4 = w_rec_imag*w_real;  
-
-	    // <s,10,22> = <s,9,22> - <s,9,22>
-	     w_temp5 = w_temp1 - w_temp2;
-
-	    // <s,10,22> = <s,9,22> + <s,9,22>
-	     w_temp6 = w_temp3 + w_temp4;
-	     
-	    // assign the sign-bit(MSB)
-	     W_real[w_index][15] = w_temp5[32];
-	     W_imag[w_index][15] = w_temp6[32];
-
-	    // assign the rest of the bits
-	     W_real[w_index].range(14,0) = w_temp5.range(24,10);
-	     W_imag[w_index].range(14,0) = w_temp6.range(24,10);
-
-	    // update w_rec.. values for the next iteration
-	     w_rec_real = W_real[w_index];
-	     w_rec_imag = W_imag[w_index];
-	    }
-
--	However, in the DIF FFT architecture, the order of outputs are bit-reversed. Thus, we have to bit-reverse the indexes for each output.   
-
-	    for (int n = 0; n < N; ++n) // N = 16-pt
-	      {
-	       	bits_i = n;
-	       	bits_index[3]= bits_i[0];
-	       	bits_index[2]= bits_i[1];
-	       	bits_index[1]= bits_i[2];
-	       	bits_index[0]= bits_i[3];
-	       	index = bits_index;
-	       	real1 = real[index];
-	       	imag1 = imag[index];
-		#ifndef NATIVE_SYSTEMC
-		{
-		   	HLS_DEFINE_PROTOCOL("output");
-		   	o_real.put(real1); 
-       		o_imag.put(imag1);
-		}
-		#else
-		   	o_real.write(real1); 
-       		o_imag.write(imag1);
-		#endif
-		  }
+        void write_data_to_Tiny32mc(char* ADDR, unsigned char* buffer, int len){
+        if(_is_using_dma){  
+            // Using DMA 
+            *DMA_SRC_ADDR = (uint32_t)(buffer);
+            *DMA_DST_ADDR = (uint32_t)(ADDR);
+            *DMA_LEN_ADDR = len;
+            *DMA_OP_ADDR  = DMA_OP_MEMCPY;
+        }else{
+            // Directly Send
+            memcpy(ADDR, buffer, sizeof(unsigned char)*len);
+        }
+        }
+        void read_data_from_Tiny32mc(char* ADDR, unsigned char* buffer, int len){
+        if(_is_using_dma){
+            // Using DMA 
+            *DMA_SRC_ADDR = (uint32_t)(ADDR);
+            *DMA_DST_ADDR = (uint32_t)(buffer);
+            *DMA_LEN_ADDR = len;
+            *DMA_OP_ADDR  = DMA_OP_MEMCPY;
+        }else{
+            // Directly Read
+            memcpy(buffer, ADDR, sizeof(unsigned char)*len);
+        }
+        }
 
 ## How to execute the codes
 
