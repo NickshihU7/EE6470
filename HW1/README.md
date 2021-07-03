@@ -37,7 +37,7 @@ To adapt the filter to the input image, convolution is used here as shown in the
 
 The sc_modules, `Testbench` and `GaussianBlur`, are connected with the sc_fifo channels as shown in the figure below.
 
-<div align="center"> <img src="hw1.png" width="60%"/> </div>
+<div align="center"> <img src="hw1.png" width="50%"/> </div>
 
 ## Implementation
 
