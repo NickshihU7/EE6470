@@ -113,28 +113,28 @@ The TLM simplebus shown above has 4 master modules and 7 slave modules. The TLM 
 -   Differ from the previous HW, we use a different core `tiny32-mc` here. Thus, the functions used to tranfer data between the application and the basic-acc platform with either DMA or simple memory are modified as below.
 
         void write_data_to_Tiny32mc(char* ADDR, unsigned char* buffer, int len){
-        if(_is_using_dma){  
-            // Using DMA 
-            *DMA_SRC_ADDR = (uint32_t)(buffer);
-            *DMA_DST_ADDR = (uint32_t)(ADDR);
-            *DMA_LEN_ADDR = len;
-            *DMA_OP_ADDR  = DMA_OP_MEMCPY;
-        }else{
-            // Directly Send
-            memcpy(ADDR, buffer, sizeof(unsigned char)*len);
-        }
+            if(_is_using_dma){  
+                // Using DMA 
+                *DMA_SRC_ADDR = (uint32_t)(buffer);
+                *DMA_DST_ADDR = (uint32_t)(ADDR);
+                *DMA_LEN_ADDR = len;
+                *DMA_OP_ADDR  = DMA_OP_MEMCPY;
+            }else{
+                // Directly Send
+                memcpy(ADDR, buffer, sizeof(unsigned char)*len);
+            }
         }
         void read_data_from_Tiny32mc(char* ADDR, unsigned char* buffer, int len){
-        if(_is_using_dma){
-            // Using DMA 
-            *DMA_SRC_ADDR = (uint32_t)(ADDR);
-            *DMA_DST_ADDR = (uint32_t)(buffer);
-            *DMA_LEN_ADDR = len;
-            *DMA_OP_ADDR  = DMA_OP_MEMCPY;
-        }else{
-            // Directly Read
-            memcpy(buffer, ADDR, sizeof(unsigned char)*len);
-        }
+            if(_is_using_dma){
+                // Using DMA 
+                *DMA_SRC_ADDR = (uint32_t)(ADDR);
+                *DMA_DST_ADDR = (uint32_t)(buffer);
+                *DMA_LEN_ADDR = len;
+                *DMA_OP_ADDR  = DMA_OP_MEMCPY;
+            }else{
+                // Directly Read
+                memcpy(buffer, ADDR, sizeof(unsigned char)*len);
+            }
         }
 
 ## How to execute the codes
