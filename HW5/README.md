@@ -6,7 +6,7 @@ In this HW we're going to synthesize the kernel function of the Gaussian blur an
 
 The system architecture is similar as the one in HW2, as shown in the figure below.
 
-![The system architecture](hw5.png)
+<div align="center"> <img src="hw5.png" width="50%"/> </div>
 
 1. 	A top-level module `System` is instantiated to contain `Testbench` and `GaussianBlur`.
 2. 	Compared to HW2, the three R, G, and B channels are combined as one channel "rgb".
