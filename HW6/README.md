@@ -5,9 +5,7 @@ In this HW, we're going to port the Gaussian blur module to the "basic-acc" plat
 
 ## System Architecture
 
-The system architecture is similar to the one in HW4, which uses the TLM transaction and a simpleBus to transfer the data in between as shown in the figure below.
-
-<div align="center"> <img src="hw7.png" width="80%"/> </div>
+The system architecture is similar to the one in HW4, which uses the TLM transaction and a simpleBus to transfer the data in between.
 
 The TLM simplebus shown above has 3 master modules and 13 slave modules. The TLM socket binding is as follows:
 
