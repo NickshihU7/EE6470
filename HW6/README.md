@@ -35,128 +35,116 @@ The TLM simplebus shown above has 3 master modules and 13 slave modules. The TLM
 
 ## Implementations
 
--	The core computation "Butterfly unit", defined as a function "butterfly", can be found in oneD_FFT.cpp as the codes below. In addition, to prevent from the enormous need of hardware resource, the entire module is based on 16-bits fixed point datatype. Hence, every single variable involves in the computation is carefully defined. 
+-	Similar to HW4, the data is transfered with TLM blocking transport. The relevant code can be found in `vp/platform/main.cpp` as follows.
 
-		void butterfly
-		    ( const sc_int<16>& w_real  ,
-		      const sc_int<16>& w_imag  , 
-		      const sc_int<16>& real1_in,
-		      const sc_int<16>& imag1_in,
-		      const sc_int<16>& real2_in,
-		      const sc_int<16>& imag2_in,
-		      sc_int<16>& real1_out,
-		      sc_int<16>& imag1_out,
-		      sc_int<16>& real2_out,
-		      sc_int<16>& imag2_out
-		    )
-		{
+        void blocking_transport(tlm::tlm_generic_payload &payload, sc_core::sc_time &delay){
+        wait(delay);
+        tlm::tlm_command cmd = payload.get_command();
+        sc_dt::uint64 addr = payload.get_address();
+        unsigned char *data_ptr = payload.get_data_ptr();
 
-		    // Variable declarations
-		     sc_int<17> tmp_real1;
-		     sc_int<17> tmp_imag1;
-		     sc_int<17> tmp_real2;
-		     sc_int<17> tmp_imag2;
-		     sc_int<34> tmp_real3;
-		     sc_int<34> tmp_imag3;
-		  
-		    // Begin Computation (fixed-point)
-		    // <s,6,10> = <s,5,10> + <s,5,10>
-		    tmp_real1 = real1_in + real2_in; 
-		    tmp_imag1 = imag1_in + imag2_in;
-		    tmp_real2 = real1_in - real2_in;
-		    tmp_imag2 = imag1_in - imag2_in;
-		    //   <s,13,20> = <s,6,10>*<s,5,10> - <s,6,10>*<s,5,10>
-		    tmp_real3 = tmp_real2*w_real - tmp_imag2*w_imag;
-		    //   <s,13,20> = <s,6,10>*<s,5,10> - <s,6,10>*<s,5,10>
-		    tmp_imag3 = tmp_real2*w_imag + tmp_imag2*w_real; 
-		    // assign the sign-bit(MSB)      
-		    real1_out[15] = tmp_real1[16];
-		    imag1_out[15] = tmp_imag1[16];
-		    // assign the rest of the bits
-		    real1_out.range(14,0) = tmp_real1.range(14,0);
-		    imag1_out.range(14,0) = tmp_imag1.range(14,0);
-		   	// assign the sign-bit(MSB)      
-		    real2_out[15] = tmp_real3[33];
-		    imag2_out[15] = tmp_imag3[33];          
-		   	// assign the rest of the bits
-		    real2_out.range(14,0) = tmp_real3.range(24,10);
-		    imag2_out.range(14,0) = tmp_imag3.range(24,10);
+        addr -= base_offset;
+        word buffer;
 
-		}
+        switch (cmd) {
+        case tlm::TLM_READ_COMMAND:
+            // cout << "READ" << endl;
+            switch (addr) {
+            case SOBEL_FILTER_RESULT_ADDR1:
+                buffer.uint = o_red.read();
+                break;
+            case SOBEL_FILTER_RESULT_ADDR2:
+                buffer.uint = o_green.read();
+                break;
+            case SOBEL_FILTER_RESULT_ADDR3:
+                buffer.uint = o_blue.read();
+                break;
+                default:
+                std::cerr << "READ Error! GaussianBlur::blocking_transport: address 0x"
+                        << std::setfill('0') << std::setw(8) << std::hex << addr
+                        << std::dec << " is not valid" << std::endl;
+            }
+            data_ptr[0] = buffer.uc[0];
+            data_ptr[1] = buffer.uc[1];
+            data_ptr[2] = buffer.uc[2];
+            data_ptr[3] = buffer.uc[3];
+            break;
+        case tlm::TLM_WRITE_COMMAND:
+            // cout << "WRITE" << endl;
+            switch (addr) {
+            case SOBEL_FILTER_R_ADDR:
+                i_r.write(data_ptr[0]);
+                i_g.write(data_ptr[1]);
+                i_b.write(data_ptr[2]);
+                break;
+            default:
+                std::cerr << "WRITE Error! GaussianBlur::blocking_transport: address 0x"
+                        << std::setfill('0') << std::setw(8) << std::hex << addr
+                        << std::dec << " is not valid" << std::endl;
+            }
+            break;
+        case tlm::TLM_IGNORE_COMMAND:
+            payload.set_response_status(tlm::TLM_GENERIC_ERROR_RESPONSE);
+            return;
+        default:
+            payload.set_response_status(tlm::TLM_GENERIC_ERROR_RESPONSE);
+            return;
+        }
+        payload.set_response_status(tlm::TLM_OK_RESPONSE); // Always OK
+        }
 
--	As for the twiddle factor in the calculation of FFT, a recursive method is used here as shown below: 
+-   The data is read/write from/to the `GaussianBlur` in the way below, which can be found in `sw/main.cpp`.
 
-	    // <'s'/'u',m,n>: is used in comments to denote a fixed point representation
-	    // 's'- signed, 'u'- unsigned, m - no. of integer bits, n - no. of fractional bits
-	    //  N = 16
-	    //  theta = 8.0*atan(1.0)/N; theta = 22.5 degree
+        unsigned char  buffer[4] = {0};
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < length; j++){
+                for(int v = -1; v <= 1; v ++){
+                    for(int u = -1; u <= 1; u++){
+                    if((v + i) >= 0  &&  (v + i ) < width && (u + j) >= 0 && (u + j) < length ){
+                        buffer[0] = *(source_bitmap + bytes_per_pixel * ((j + u) * width + (i + v)) + 2);
+                        buffer[1] = *(source_bitmap + bytes_per_pixel * ((j + u) * width + (i + v)) + 1);
+                        buffer[2] = *(source_bitmap + bytes_per_pixel * ((j + u) * width + (i + v)) + 0);
+                        buffer[3] = 0;
+                    }else{
+                        buffer[0] = 0;
+                        buffer[1] = 0;
+                        buffer[2] = 0;
+                        buffer[3] = 0;
+                    }
+                    write_data_to_ACC(SOBELFILTER_START_ADDR, buffer, 4);
+                    }
+                }
+                read_data_from_ACC(SOBELFILTER_READ_ADDR, buffer, 4);
+            }
+        }
 
-       	//  w_real =  cos(theta) = 0.92 (000000.1110101110) <s,5,10>
-            w_real =  942;
+    The functions used to tranfer data between the application and the basic-acc platform with either DMA or simple memory are defined as below.
 
-       	//  w_imag = -sin(theta) = -0.38(111111.1001111010) <s,5,10>
-            w_imag = -389;
+        void write_data_to_ACC(char* ADDR, unsigned char* buffer, int len){
+            if(_is_using_dma){  
+                // Using DMA 
+                *DMA_SRC_ADDR = (uint32_t)(buffer);
+                *DMA_DST_ADDR = (uint32_t)(ADDR);
+                *DMA_LEN_ADDR = len;
+                *DMA_OP_ADDR  = DMA_OP_MEMCPY;
+            }else{
+                // Directly Send
+                memcpy(ADDR, buffer, sizeof(unsigned char)*len);
+            }
+        }
 
-       	//  w_rec_real = 1(0000001.0000000000)
-	   	    w_rec_real = 1024;
-
-       	//  w_rec_real = 0(000000.0000000000)	 
-            w_rec_imag = 0;
-
-	    unsigned short w_index;
-	    w_index = 0;  
-	    for( w_index = 0; w_index < W; ++w_index) 
-	    {
-	    // <s,9,22> = <s,5,10> * <s,5,10>
-	     w_temp1 = w_rec_real*w_real;
-	     w_temp2 = w_rec_imag*w_imag;
-
-	    // <s,9,22> = <s,5,10> * <s,5,10>
-	     w_temp3 = w_rec_real*w_imag;
-	     w_temp4 = w_rec_imag*w_real;  
-
-	    // <s,10,22> = <s,9,22> - <s,9,22>
-	     w_temp5 = w_temp1 - w_temp2;
-
-	    // <s,10,22> = <s,9,22> + <s,9,22>
-	     w_temp6 = w_temp3 + w_temp4;
-	     
-	    // assign the sign-bit(MSB)
-	     W_real[w_index][15] = w_temp5[32];
-	     W_imag[w_index][15] = w_temp6[32];
-
-	    // assign the rest of the bits
-	     W_real[w_index].range(14,0) = w_temp5.range(24,10);
-	     W_imag[w_index].range(14,0) = w_temp6.range(24,10);
-
-	    // update w_rec.. values for the next iteration
-	     w_rec_real = W_real[w_index];
-	     w_rec_imag = W_imag[w_index];
-	    }
-
--	However, in the DIF FFT architecture, the order of outputs are bit-reversed. Thus, we have to bit-reverse the indexes for each output.   
-
-	    for (int n = 0; n < N; ++n) // N = 16-pt
-	      {
-	       	bits_i = n;
-	       	bits_index[3]= bits_i[0];
-	       	bits_index[2]= bits_i[1];
-	       	bits_index[1]= bits_i[2];
-	       	bits_index[0]= bits_i[3];
-	       	index = bits_index;
-	       	real1 = real[index];
-	       	imag1 = imag[index];
-		#ifndef NATIVE_SYSTEMC
-		{
-		   	HLS_DEFINE_PROTOCOL("output");
-		   	o_real.put(real1); 
-       		o_imag.put(imag1);
-		}
-		#else
-		   	o_real.write(real1); 
-       		o_imag.write(imag1);
-		#endif
-		  }
+        void read_data_from_ACC(char* ADDR, unsigned char* buffer, int len){
+            if(_is_using_dma){
+                // Using DMA 
+                *DMA_SRC_ADDR = (uint32_t)(ADDR);
+                *DMA_DST_ADDR = (uint32_t)(buffer);
+                *DMA_LEN_ADDR = len;
+                *DMA_OP_ADDR  = DMA_OP_MEMCPY;
+            }else{
+                // Directly Read
+                memcpy(buffer, ADDR, sizeof(unsigned char)*len);
+            }
+        }
 
 ## How to execute the codes
 
