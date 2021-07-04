@@ -23,7 +23,7 @@ Thus, the FFT was proposed for the purpose of making it efficient and more hardw
 
 ![DIF FFT](https://latex.codecogs.com/svg.image?=\sum_{n=0}^{N/2-1}\left&space;[&space;x\left&space;(&space;n&space;\right&space;)&plus;x\left&space;(&space;n&plus;\frac{N}{2}&space;\right&space;)&space;\right&space;]W_{N/2}^{mn}&plus;\sum_{n=0}^{N/2-1}\left&space;(&space;\left&space;[&space;x\left&space;(&space;n&space;\right&space;)-x\left&space;(&space;n&plus;\frac{N}{2}&space;\right&space;)&space;\right&space;]W_{N/2}^{mn}&space;\right&space;)W_{N}^{n})
 
-which devides the output terms into even and odd. By doing so on and on for each stage, finally it has the time somplexity of Nlog2(N), which significantly decreasse the latency.
+which devides the output terms into even and odd. By doing so on and on for each stage, finally it has the time somplexity of Nlog2(N), which significantly decrease the latency.
 
 The relative architecture design for 16-pt DIF FFT which has 4 stages is shown in the figure below.
 
